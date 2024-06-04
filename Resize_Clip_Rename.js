@@ -77,7 +77,7 @@ if (sourceFolder && destinationFolder) {
             
             // Save the file to the destination folder with the directory path and adjusted filename.
             var directoryPath = relativePath.substring(0, relativePath.lastIndexOf("/") + 1);
-            var saveFile = new File(destinationFolder.fullName + directoryPath + destinationPath.name + cardNum);
+            var saveFile = new File(destinationFolder.fullName + directoryPath + destinationPath.name + cardIndexExtension);
             app.activeDocument.exportDocument(saveFile, ExportType.SAVEFORWEB, exportOptions);
 
 
