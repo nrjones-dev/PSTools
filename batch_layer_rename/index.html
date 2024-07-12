@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="index.js"></script>
+  </head>
+  <style>
+    body {
+      color: white;
+      padding: 0 16px;
+      min-width: 250px;
+      background-color: var(--uxp-host-background-color);
+      color: var(--uxp-host-text-color);
+      border-color: var(--uxp-host-border-color);
+      font-size: var(--uxp-host-font-size);
+    }
+    .wrapper {
+      padding: 0 16px;
+      width: 100%;
+      position: absolute;
+      overflow-y: scroll;
+      top: 0; bottom: 0; left: 0; right: 0;
+    }
+    .mainHeader {
+      text-align: center;
+      padding: 10px;
+    }
+    .subHeader {
+      font-size: medium;
+      padding: 5px;
+    }
+    sp-textfield {
+      padding: 5px;
+      width: 250px;
+    }
+    sp-button {
+      margin: 5px;
+    }
+    footer {
+      width: 100%;
+      height: 50px;
+    }
+  </style>
+  <body>
+    <div class="wrapper">
+      <sp-heading class="mainHeader">Layers</sp-heading>
+      <sp-divider size="large"></sp-divider>
+
+      <sp-heading class="subHeader">Add Prefix</sp-heading>
+      <sp-divider size="medium"></sp-divider>
+      <sp-textfield class="prefixText" placeholder="Add prefix here" id="add_prefix_text"></sp-textfield>
+      <sp-button id="btnPrefix">Add Prefix</sp-button>
+
+      <sp-heading class="subHeader">Add Suffix</sp-heading>
+      <sp-divider size="medium"></sp-divider>
+      <sp-textfield class="prefixText" placeholder="Add suffix here" id="add_suffix_text"></sp-textfield>
+      <sp-button class="button" id="btnSuffix">Add suffix</sp-button>
+      <sp-divider size="medium"></sp-divider>
+
+      <sp-heading class="subHeader">Rename Layers</sp-heading>
+      <sp-divider size="medium"></sp-divider>
+      <sp-textfield class="renameText" placeholder="Enter name here" id="rename_layer_text"></sp-textfield>
+      <sp-button id="btnRename">Rename Text</sp-button>
+
+      
+      
+    </div>
+    <footer>
+      <!-- <sp-button id="btnRename">Rename Layers</sp-button> -->
+    </footer>
+  </body>
+</html>
