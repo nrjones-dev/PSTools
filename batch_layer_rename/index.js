@@ -1,5 +1,9 @@
+function executePhotoshopModal(callback, commandName) {
+  return window.require('photoshop').core.executeAsModal(callback, { commandName });
+}
+
 function renameLayerNames() {
-  return window.require('photoshop').core.executeAsModal(
+  return executePhotoshopModal(
     () => {
       const app = window.require('photoshop').app;
 
@@ -13,9 +17,8 @@ function renameLayerNames() {
   );
 }
 
-
 function addPrefix() {
-  return window.require('photoshop').core.executeAsModal(
+  return executePhotoshopModal(
     () => {
       const app = window.require('photoshop').app;
 
