@@ -1,0 +1,62 @@
+{
+  "manifestVersion": 5,
+  "id": "com.supersolid.pngresizer",
+  "name": "Resize and Export PNGs",
+  "version": "1.0.0",
+  "description": "This plugin resizes PNG images and exports them to a specified destination.",
+  "author": "Nathan Jones",
+  "main": "index.html",
+  "host": [
+    {
+    "app": "PS",
+    "minVersion": "22.0"
+    }
+  ],
+
+"featureFlags": {
+    "enableAlerts": true
+},
+
+"entrypoints": [
+  {
+    "type": "panel",
+    "id": "pngResizer",
+    "minimumSize": {
+      "width": 230,
+      "height": 200
+    },
+    "maximumSize": {
+      "width": 2000,
+      "height": 2000
+    },
+    "preferredDockedSize": {
+      "width": 230,
+      "height": 300
+    },
+    "preferredFloatingSize": {
+      "width": 400,
+      "height": 250
+    },
+    "label": {
+      "default": "PNG Resizer"
+    },
+    "icons": [
+      {
+        "width": 23,
+        "height": 23,
+        "path": "icon.png",
+        "scale": [
+          1,
+          2
+        ]
+      }
+    ]
+  }
+],
+  
+"requiredPermissions": {
+  "clipboard": "readAndWrite",
+  "localFileSystem": "fullAccess"
+}
+
+}
