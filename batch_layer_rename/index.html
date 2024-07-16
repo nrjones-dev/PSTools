@@ -43,12 +43,12 @@
   </style>
   <body>
     <div class="wrapper">
-      <sp-heading class="mainHeader">Layers</sp-heading>
+      <sp-heading class="mainHeader">Layer Renamer</sp-heading>
       <sp-divider size="large"></sp-divider>
 
       <sp-heading class="subHeader">Add Prefix</sp-heading>
       <sp-divider size="medium"></sp-divider>
-      <sp-textfield class="prefixText" placeholder="Add prefix here" id="add_prefix_text"></sp-textfield>
+      <sp-textfield class="button" class="prefixText" placeholder="Add prefix here" id="add_prefix_text"></sp-textfield>
       <sp-button id="btnPrefix">Add Prefix</sp-button>
 
       <sp-heading class="subHeader">Add Suffix</sp-heading>
@@ -60,8 +60,11 @@
       <sp-heading class="subHeader">Rename Layers</sp-heading>
       <sp-divider size="medium"></sp-divider>
       <sp-textfield class="renameText" placeholder="Enter name here" id="rename_layer_text"></sp-textfield>
-      <sp-button id="btnRename">Rename Text</sp-button>
-
+      <sp-button class="button" id="btnRename">Rename Text</sp-button>
+      
+      <sp-heading class="subHeader">Delete Empty Layers</sp-heading>
+      <sp-divider size="medium"></sp-divider>
+      <sp-button class="button" id="btnDeleteEmpty">Delete Empty</sp-button>
       
       
     </div>
