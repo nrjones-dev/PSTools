@@ -1,11 +1,11 @@
 {
   "manifestVersion": 5,
-  "id": "rename.layers.plugin",
+  "id": "nrj.rename-layers",
   "name": "Rename Layers",
   "version": "1.0.0",
   "main": "index.html",
   "author": "Nathan Jones",
-  "description": "A plugin to rename layers based on user input.",
+  "description": "A plugin to rename layers, add a suffix and prefix and delete empty layers.",
   "host": {
     "app": "PS",
     "minVersion": "23.3.0",
@@ -17,7 +17,7 @@
   "entrypoints": [
     {
       "type": "panel",
-      "id": "layercreation",
+      "id": "nrj.rename-layers",
       "label": {
         "default": "Layer Renamer"
       },
@@ -31,15 +31,18 @@
       },
       "preferredDockedSize": {
         "width": 300,
-        "height": 350
+        "height": 400
       },
       "preferredFloatingSize": {
         "width": 450,
-        "height": 400
+        "height": 500
       }
     }
   ],
   "requiredPermissions": {
     "localFileSystem": "request"
+  },
+  "featureFlags": {
+    "enableAlerts": true
   }
 }
