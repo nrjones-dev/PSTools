@@ -80,7 +80,7 @@ async function deleteEmptyLayers(layers) {
 }
 
 async function deleteEmpty() {
-  const confirmed = window.confirm('Are you sure?');
+  const confirmed = window.confirm('Are you sure? This will delete all empty folders and layers');
   if (!confirmed) return;
 
   await executePhotoshopModal(async () => {
