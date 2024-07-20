@@ -49,21 +49,47 @@ async function isEmpty(layer) {
   return right - left === 0 || bottom - top === 0;
 }
 
-// Recursively delete empty layers
-async function deleteEmptyLayers(layers) {
+// Recursively collect names of empty layers.
+async function collectEmptyLayers(layers, emptyLayers) {
   for (const layer of layers) {
-    if (layer.layers) await deleteEmptyLayers(layer.layers);
-    if (await isEmpty(layer)) layer.delete();
+    if (layer.layers) await collectEmptyLayers(layer.layers, emptyLayers);
+    if (await isEmpty(layer)) emptyLayers.push(layer);
   }
 }
 
+async function selectEmpty() { 
+  const emptyLayers = []
+  await collectEmptyLayers(app.activeDocument.layers, emptyLayers);
+  if (emptyLayers.length === 0) {
+    document.getElementById("layerList").innerHTML = '';
+    return;
+  }
+
+  document.getElementById("layerList").innerHTML = `
+    <ul>${emptyLayers.map((layer) => `<li>${layer.name}</li>`).join("")}</ul>`;
+}
+
 async function deleteEmpty() {
-  const confirmed = window.confirm('Are you sure? This will delete all empty folders and layers');
+  const emptyLayers = []
+  await collectEmptyLayers(app.activeDocument.layers, emptyLayers);
+  
+  if (emptyLayers.length === 0) {
+    window.alert('No empty layers to delete.');
+    return;
+  }
+  const confirmed = window.confirm('Are you sure you want to delete empty layers?');
   if (!confirmed) return;
 
   await executePhotoshopModal(async () => {
-    await deleteEmptyLayers(app.activeDocument.layers);
+    try{
+      emptyLayers.forEach((layer) => (layer.delete()));
+    } catch(err) {
+      console.log(err.message)
+    }
+    
   }, 'Delete Layers');
+  emptyLayers.length = 0;
+  document.getElementById("layerList").innerHTML = 'Layers successfully deleted.';
 }
 
 // Adding event listeners to buttons
@@ -71,3 +97,4 @@ document.getElementById('btnRename').addEventListener('click', renameLayerNames)
 document.getElementById('btnPrefix').addEventListener('click', addPrefix);
 document.getElementById('btnSuffix').addEventListener('click', addSuffix);
 document.getElementById('btnDeleteEmpty').addEventListener('click', deleteEmpty);
+document.getElementById('btnSelectEmpty').addEventListener('click', selectEmpty);

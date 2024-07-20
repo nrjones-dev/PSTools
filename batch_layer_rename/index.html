@@ -8,18 +8,25 @@
       color: white;
       padding: 0 16px;
       min-width: 250px;
-      background-color: var(--uxp-host-background-color);
-      color: var(--uxp-host-text-color);
-      border-color: var(--uxp-host-border-color);
-      font-size: var(--uxp-host-font-size);
+
+    }
+    sp-textfield {
+      padding: 5px;
+      width: 250px;
+    }
+    sp-button {
+      margin: 5px;
     }
     .wrapper {
       padding: 0 16px;
       width: 100%;
       position: absolute;
       overflow-y: scroll;
-      
-      top: 0; bottom: 0; left: 0; right: 0;
+
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
     .mainHeader {
       text-align: center;
@@ -29,17 +36,31 @@
       font-size: medium;
       padding: 5px;
     }
-    sp-textfield {
-      padding: 5px;
-      width: 250px;
+    .layerText {
+      text-align: center;
+      font-weight: normal;
+      font-size: 14px;
     }
-    sp-button {
-      margin: 5px;
+    .layerHeading{
+      text-align: center;
+      font-weight: bold;
     }
+    #subHeaderSmall {
+      font-size:16px;
+    }
+    #btnDeleteEmpty {
+      margin-left: 45px;
+      margin-top: 10px;
+    }
+    #btnSelectEmpty {
+      margin-left: 20px;
+      margin-top: 10px;
+    }
+
   </style>
   <body>
     <div class="wrapper">
-      <sp-heading class="mainHeader">Layer Renamer</sp-heading>
+      <sp-heading class="mainHeader">Layer Utilities</sp-heading>
       <sp-divider size="large"></sp-divider>
 
       <sp-heading class="subHeader">Add Prefix</sp-heading>
@@ -51,18 +72,19 @@
       <sp-divider size="medium"></sp-divider>
       <sp-textfield class="prefixText" placeholder="Add suffix here" id="add_suffix_text"></sp-textfield>
       <sp-button class="button" id="btnSuffix">Add suffix</sp-button>
-      <sp-divider size="medium"></sp-divider>
 
       <sp-heading class="subHeader">Rename Layers</sp-heading>
       <sp-divider size="medium"></sp-divider>
       <sp-textfield class="renameText" placeholder="Enter name here" id="rename_layer_text"></sp-textfield>
       <sp-button class="button" id="btnRename">Rename Text</sp-button>
-      
+
       <sp-heading class="subHeader">Delete Empty Layers</sp-heading>
       <sp-divider size="medium"></sp-divider>
-      <sp-button class="button" id="btnDeleteEmpty">Delete Empty</sp-button>
-      
-      
+      <sp-button class="button" id="btnSelectEmpty">Select Empty Layers</sp-button>
+      <sp-button class="button" id="btnDeleteEmpty">Delete Empty Layers</sp-button>
+      <sp-heading id="subHeaderSmall" class="layerHeading">Layers to Delete</sp-heading>
+      <sp-divider size="small"></sp-divider>
+      <p class="layerText" id="layerList"></p>
     </div>
   </body>
 </html>
