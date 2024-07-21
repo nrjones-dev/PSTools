@@ -1,2 +1,3 @@
-.venv/*
 testing/
+batch_layer_rename/layer_test.psd
+work_scripts.py
