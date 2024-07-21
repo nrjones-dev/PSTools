@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "main": "index.html",
   "author": "Nathan Jones",
-  "description": "A plugin to rename layers, add a suffix and prefix and delete empty layers.",
+  "description": "A utility plugin to manage layers. Rename, search and replace, delete empty layers and add a suffix or prefix",
   "host": {
     "app": "PS",
     "minVersion": "23.3.0",
@@ -14,6 +14,15 @@
       "loadEvent": "use"
     }
   },
+  "icons": [
+    {
+      "width": 23,
+      "height": 23,
+      "path": "icons/icon.png",
+      "scale": [1, 2],
+      "theme": ["darkest", "dark", "light", "lightest", "all"]
+    }
+  ],
   "entrypoints": [
     {
       "type": "panel",
@@ -23,20 +32,29 @@
       },
       "minimumSize": {
         "width": 450,
-        "height": 300
+        "height": 400
       },
       "maximumSize": {
-        "width": 600,
-        "height": 1000
+        "width": 450,
+        "height": 2000
       },
       "preferredDockedSize": {
         "width": 450,
-        "height": 500
+        "height": 600
       },
       "preferredFloatingSize": {
         "width": 450,
-        "height": 600
-      }
+        "height": 800
+      },
+      "icons": [
+        {
+          "width": 23,
+          "height": 23,
+          "path": "icons/icon.png",
+          "scale": [1, 2],
+          "theme": ["darkest", "dark", "light", "lightest", "all"]
+        }
+      ]
     }
   ],
   "requiredPermissions": {

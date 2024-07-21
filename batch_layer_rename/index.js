@@ -6,37 +6,52 @@ function executePhotoshopModal(callback, commandName) {
 }
 
 // RENAME AND ADD SUFFIX/PREFIX FUNCTIONALITY
-function getInputValue(selector) {
+function getInputValue(selector, warningSelector) {
   const selectorValue = document.querySelector(selector).value;
-  if (!selectorValue) {
-    window.alert('No text entered');
-    return null;
+  if (!selectorValue && !(warningSelector === 'replaceWarning')) {
+    document.getElementById(warningSelector).innerHTML = 'Please enter text';
+    return;
   }
+  document.getElementById(warningSelector).innerHTML = '';
   return selectorValue;
 }
 
 function renameLayerNames() {
-  const newName = getInputValue('#rename_layer_text');
+  const newName = getInputValue('#rename_layer_text', 'renameWarning');
   if (!newName) return;
   executePhotoshopModal(() => {
     app.activeDocument.activeLayers.forEach((layer) => (layer.name = newName));
   }, 'Rename layers');
 }
 
-function addPrefix() {
-  const prefixText = getInputValue('#add_prefix_text');
-  if (!prefixText) return;
+function replaceText() {
+  const textToRemove = getInputValue('#text_to_remove', 'replaceWarning');
+  let textToAdd = getInputValue('#text_to_add', 'replaceWarning');
+  if (!textToRemove) return;
+  if (!textToAdd) textToAdd = '';
+
   executePhotoshopModal(() => {
-    app.activeDocument.activeLayers.forEach((layer) => (layer.name = `${prefixText}_${layer.name}`));
-  }, 'Add Prefix');
+    app.activeDocument.activeLayers.forEach((layer) => {
+      layer.name = layer.name.replaceAll(textToRemove, textToAdd);
+    });
+  }, 'Replace Name');
 }
 
-function addSuffix() {
-  const suffixText = getInputValue('#add_suffix_text');
-  if (!suffixText) return;
+function addAffix() {
+  const affixText = getInputValue('#add_affix_text', 'affixWarning');
+  if (!affixText) return;
+
+  const affixType = document.querySelector('sp-radio-group[name="affixType"]').selected;
+
   executePhotoshopModal(() => {
-    app.activeDocument.activeLayers.forEach((layer) => (layer.name = `${layer.name}_${suffixText}`));
-  }, 'Add Suffix');
+    app.activeDocument.activeLayers.forEach((layer) => {
+      if (affixType === 'prefix') {
+        layer.name = `${affixText}${layer.name}`;
+      } else if (affixType === 'suffix') {
+        layer.name = `${layer.name}${affixText}`;
+      }
+    });
+  }, 'Add Affix');
 }
 
 // DELETE EMPTY LAYERS FUNCTIONALITY //
@@ -57,44 +72,38 @@ async function collectEmptyLayers(layers, emptyLayers) {
   }
 }
 
-async function selectEmpty() { 
-  const emptyLayers = []
+async function selectEmpty() {
+  const emptyLayers = [];
   await collectEmptyLayers(app.activeDocument.layers, emptyLayers);
   if (emptyLayers.length === 0) {
-    document.getElementById("layerList").innerHTML = '';
+    document.getElementById('layerList').innerHTML = 'No empty layers to select';
     return;
   }
-
-  document.getElementById("layerList").innerHTML = `
-    <ul>${emptyLayers.map((layer) => `<li>${layer.name}</li>`).join("")}</ul>`;
+  document.getElementById('layerList').innerHTML = `
+    <ul>${emptyLayers.map((layer) => `<li>${layer.name}</li>`).join('')}</ul>`;
 }
 
 async function deleteEmpty() {
-  const emptyLayers = []
+  const emptyLayers = [];
   await collectEmptyLayers(app.activeDocument.layers, emptyLayers);
-  
+
   if (emptyLayers.length === 0) {
-    window.alert('No empty layers to delete.');
+    document.getElementById('layerList').innerHTML = 'No empty layers to delete';
     return;
   }
   const confirmed = window.confirm('Are you sure you want to delete empty layers?');
   if (!confirmed) return;
 
   await executePhotoshopModal(async () => {
-    try{
-      emptyLayers.forEach((layer) => (layer.delete()));
-    } catch(err) {
-      console.log(err.message)
-    }
-    
+    emptyLayers.forEach((layer) => layer.delete());
   }, 'Delete Layers');
   emptyLayers.length = 0;
-  document.getElementById("layerList").innerHTML = 'Layers successfully deleted.';
+  document.getElementById('layerList').innerHTML = 'Layers successfully deleted.';
 }
 
 // Adding event listeners to buttons
 document.getElementById('btnRename').addEventListener('click', renameLayerNames);
-document.getElementById('btnPrefix').addEventListener('click', addPrefix);
-document.getElementById('btnSuffix').addEventListener('click', addSuffix);
+document.getElementById('btnAffix').addEventListener('click', addAffix);
+document.getElementById('btnReplace').addEventListener('click', replaceText);
 document.getElementById('btnDeleteEmpty').addEventListener('click', deleteEmpty);
 document.getElementById('btnSelectEmpty').addEventListener('click', selectEmpty);
