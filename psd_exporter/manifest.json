@@ -14,6 +14,15 @@
       "loadEvent": "use"
     }
   },
+  "icons": [
+    {
+      "width": 23,
+      "height": 23,
+      "path": "icons/icon.png",
+      "scale": [1, 2],
+      "theme": ["darkest", "dark", "light", "lightest", "all"]
+    }
+  ],
   "entrypoints": [
     {
       "type": "panel",
@@ -36,11 +45,20 @@
       "preferredFloatingSize": {
         "width": 200,
         "height": 150
-      }
+      },
+      "icons": [
+        {
+          "width": 23,
+          "height": 23,
+          "path": "icons/icon.png",
+          "scale": [1, 2],
+          "theme": ["darkest", "dark", "light", "lightest", "all"]
+        }
+      ]
     }
   ],
   "requiredPermissions": {
-    "localFileSystem": "fullAccess"
+    "localFileSystem": "request"
   },
   "featureFlags": {
     "enableAlerts": true
