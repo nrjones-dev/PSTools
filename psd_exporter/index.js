@@ -15,7 +15,8 @@ function findLayers(layers) {
   const mergeGroups = [];
   layers.forEach((layer) => {
     if (layer.layers) {
-      mergeGroups.push(...findLayers(layer.layers));
+      const foundLayers = findLayers(layer.layers);
+      mergeGroups.push(...foundLayers);
     }
     if (layer.kind === constants.LayerKind.GROUP && (layer.name.endsWith(SWIPE) || layer.name.endsWith(MERGE))) {
       mergeGroups.push(layer);
