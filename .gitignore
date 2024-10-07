@@ -1,6 +1,5 @@
 .venv/*
 testing/
-psd_exporter/Area31_Cooking_School_TEST_EXPORT.psd
-psd_exporter/Area31_Cooking_School_TEST.psd
-psd_exporter/Test_PSD_2.psd
 psd_exporter/Test_PSD.psd
+testing/
+batch_layer_rename/layer_test.psd
