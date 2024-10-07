@@ -1,57 +1,58 @@
-const { app, constants } = require('photoshop');
+const { app, constants, core } = require('photoshop');
 const { storage } = require('uxp');
 
 // Helper function to execute photoshop as modal.
 function executePhotoshopModal(callback, commandName) {
-  return window.require('photoshop').core.executeAsModal(callback, { commandName });
+  return core.executeAsModal(callback, { commandName });
 }
 
 // Suffix name constants
 const SWIPE = '_SWIPE';
 const MERGE = '_MERGE';
+const RESOLUTION = [1024, 1267];
 
 // find all relevant layers that are of kind GROUP and ends with SWIPE or MERGE constants
 function findLayers(layers) {
-  const mergeGroups = [];
+  const groupsToMerge = [];
   layers.forEach((layer) => {
     if (layer.layers) {
       const foundLayers = findLayers(layer.layers);
-      mergeGroups.push(...foundLayers);
+      groupsToMerge.push(...foundLayers);
     }
     if (layer.kind === constants.LayerKind.GROUP && (layer.name.endsWith(SWIPE) || layer.name.endsWith(MERGE))) {
-      mergeGroups.push(layer);
+      groupsToMerge.push(layer);
     }
   });
-  return mergeGroups;
+  return groupsToMerge;
 }
 
-// Remove suffix from gorups that will be merged, and merges them
-function mergeLayers(mergeGroups) {
+// Remove suffix from groups that will be merged, and merges them into a single layer
+function mergeGroupLayers(groupsToMerge) {
   executePhotoshopModal(() => {
-    mergeGroups.forEach((layer) => {
+    groupsToMerge.forEach((layer) => {
       layer.name = layer.name.replace(SWIPE, '').replace(MERGE, '');
       layer.merge();
     });
-  }, 'merge layers');
+  }, 'merging layers');
 }
 
-// Main function that calls findLayers and mergeLayers on button press
+// Main function that calls findLayers and mergeGroupLayers on button press
 function flattenGroupsMain() {
   const documentLayers = app.activeDocument.layers;
-  const mergeGroups = findLayers(documentLayers);
+  const groupsToMerge = findLayers(documentLayers);
 
-  if (mergeGroups.length === 0) {
+  if (groupsToMerge.length === 0) {
     window.alert('No layers to merge');
     return;
   }
-  mergeLayers(mergeGroups);
+  mergeGroupLayers(groupsToMerge);
 }
 
 // Resize and Export document as PSD functionality
 async function resizeDocument() {
   await executePhotoshopModal(() => {
-    app.activeDocument.resizeImage(1024, 1267);
-  }, 'resize document');
+    app.activeDocument.resizeImage(...RESOLUTION);
+  }, 'resizing document');
 }
 
 async function saveFile() {
@@ -59,7 +60,7 @@ async function saveFile() {
   const entry = await storage.localFileSystem.getFileForSaving(`${fileNameWithoutExt}_EXPORT.psd`);
   await executePhotoshopModal(() => {
     app.activeDocument.saveAs.psd(entry);
-  }, 'save psd');
+  }, 'saving psd');
 }
 
 async function exportFile() {
