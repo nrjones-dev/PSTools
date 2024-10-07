@@ -1,0 +1,48 @@
+{
+  "manifestVersion": 5,
+  "id": "nrj.psd-exporter",
+  "name": "PSD Exporter",
+  "version": "1.0.0",
+  "main": "index.html",
+  "author": "Nathan Jones",
+  "description": "A plugin to flatten Area PSD groups based on suffix and export final file.",
+  "host": {
+    "app": "PS",
+    "minVersion": "23.3.0",
+    "data": {
+      "apiVersion": 2,
+      "loadEvent": "use"
+    }
+  },
+  "entrypoints": [
+    {
+      "type": "panel",
+      "id": "nrj.psd-exporter",
+      "label": {
+        "default": "Area PSD Exporter"
+      },
+      "minimumSize": {
+        "width": 200,
+        "height": 150
+      },
+      "maximumSize": {
+        "width": 200,
+        "height": 150
+      },
+      "preferredDockedSize": {
+        "width": 200,
+        "height": 150
+      },
+      "preferredFloatingSize": {
+        "width": 200,
+        "height": 150
+      }
+    }
+  ],
+  "requiredPermissions": {
+    "localFileSystem": "fullAccess"
+  },
+  "featureFlags": {
+    "enableAlerts": true
+  }
+}
