@@ -34,42 +34,37 @@ function mergeGroupLayers(groupsToMerge) {
   executePhotoshopModal(() => {
     groupsToMerge.forEach((layer) => {
       layer.name = layer.name.replace(SWIPE, '').replace(MERGE, '');
-      layer.merge();
     });
+    groupsToMerge.forEach((layer) => layer.merge());
   }, 'merging layers');
 }
 
 // Function that creates layer masks based on layer bounds for each group.
 async function createMaskFromBounds(layer) {
-  // Get layer bounds
-  const bounds = layer.bounds;
-  const width = bounds.right - bounds.left;
-  const height = bounds.bottom - bounds.top;
-  const layer_ID = layer.id;
+  const { width: docWidth, height: docHeight } = app.activeDocument;
+  const { left, top, right, bottom } = layer.bounds;
 
-  // creates buffer for use as an ImageData object.
-  const buffer = new Uint8Array(width * height).fill(255);
+  // Create a full-sized buffer initialized to 0 (black).
+  const buffer = new Uint8Array(docWidth * docHeight).fill(0);
+  const rowSize = right - left;
+  const whiteRow = new Uint8Array(rowSize).fill(255);
 
-  // Create an ImageData object from the buffer using the layer bounds width and height.
+  // Fill only the target area with white (255) using a subarray.
+  for (let y = top; y < bottom; y++) {
+    buffer.set(whiteRow, y * docWidth + left);
+  }
+
+  // Create the ImageData object for the entire mask.
   const maskImageData = await imaging.createImageDataFromBuffer(buffer, {
-    width: width,
-    height: height,
-    components: 1, // one component for grayscale
+    width: docWidth,
+    height: docHeight,
+    components: 1,
     colorSpace: 'Grayscale',
   });
 
-  // Creates layer mask on chosen layer/group.
-  await imaging.putLayerMask({
-    layerID: layer_ID,
-    imageData: maskImageData,
-    targetBounds: {
-      left: bounds.left,
-      top: bounds.top,
-    },
-  });
-
+  // Apply the mask to the current layer group.
+  await imaging.putLayerMask({ layerID: layer.id, imageData: maskImageData });
   maskImageData.dispose();
-  return;
 }
 
 // For each group in the list, calls 'CreateMaskFromBounds'.
@@ -78,33 +73,27 @@ async function createMasks() {
   const groupsToMask = findLayers(documentLayers);
 
   if (groupsToMask.length === 0) {
-    window.alert('No layers to mask');
-    return;
+    return window.alert('No layers to mask');
   }
+
   await executePhotoshopModal(async () => {
-    groupsToMask.forEach((group) => {
-      createMaskFromBounds(group);
-    });
+    await Promise.all(groupsToMask.map(createMaskFromBounds));
   }, 'Create Masks');
 }
 
 // Main function that calls findLayers and mergeGroupLayers on button press
 function flattenGroupsMain() {
-  const documentLayers = app.activeDocument.layers;
-  const groupsToMerge = findLayers(documentLayers);
-
-  if (groupsToMerge.length === 0) {
-    window.alert('No layers to merge');
-    return;
-  }
+  const groupsToMerge = findLayers(app.activeDocument.layers);
+  if (groupsToMerge.length === 0) return window.alert('No layers to merge');
   mergeGroupLayers(groupsToMerge);
 }
 
 // Resize and Export document as PSD functionality
 async function resizeDocument() {
-  await executePhotoshopModal(() => {
-    app.activeDocument.resizeImage(...RESOLUTION);
-  }, 'resizing document');
+  await executePhotoshopModal(
+    () => app.activeDocument.resizeImage(...RESOLUTION),
+    'resizing document'
+  );
 }
 
 async function saveFile() {
@@ -118,8 +107,10 @@ async function saveFile() {
 }
 
 async function exportFile() {
-  await resizeDocument();
-  await saveFile();
+  await executePhotoshopModal(async () => {
+    await resizeDocument();
+    await saveFile();
+  }, 'Exporting File');
 }
 
 // Event listener calls
